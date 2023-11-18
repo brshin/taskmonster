@@ -43,7 +43,7 @@ class TaskController {
   
   TextEditingController get name => nameController;
   TextEditingController get description => descriptionController;
-  DateTime get date => DateTime.now();
+  TextEditingController get date => dateController;
 
   TaskController() {
     nameController = TextEditingController();
@@ -72,7 +72,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
   DateTime _selectedDay = DateTime.now();
   DateTime _dates = DateTime.now();
 
-  TextEditingController dateController = TextEditingController();
+  //TextEditingController dateController = TextEditingController();
+  TaskController taskController = TaskController();
 
   @override
 Widget build(BuildContext context) {
@@ -99,7 +100,7 @@ Widget build(BuildContext context) {
                 ),
               ),
               Text(
-                tasks[index].name,
+                tasks[index].description,
               ),
             ]
           ),
@@ -127,7 +128,10 @@ Widget build(BuildContext context) {
   
   // Task Interface
   Future<void> _addTask(BuildContext context) async {
-    TaskController taskController = TaskController();
+    //TaskController taskController = TaskController();
+    taskController.dateController.text = '';
+    taskController.descriptionController.text = '';
+    taskController.nameController.text = '';
 
     return showDialog(
       context: context,
@@ -150,7 +154,7 @@ Widget build(BuildContext context) {
               SizedBox(height: 16.0), // Adding some space between fields
               Text('Date'),
               TextField(
-                controller: dateController,
+                controller: taskController.dateController,
                 decoration: InputDecoration(
                   labelText: 'Date',
                   filled: true,
@@ -181,7 +185,7 @@ Widget build(BuildContext context) {
                 setState(() {
                   tasks.add(Task(name: taskController.nameController.text, 
                                  description: taskController.descriptionController.text,
-                                 date: taskController.date));
+                                 date: DateTime.parse(taskController.dateController.text)));
                 });
                 Navigator.of(context).pop();
               },
@@ -203,7 +207,7 @@ Widget build(BuildContext context) {
 
     if (_picked != null) {
       setState(() {
-        dateController.text = _picked.toString().split(" ")[0];
+        taskController.dateController.text = _picked.toString().split(" ")[0];
       });
     }
   }
