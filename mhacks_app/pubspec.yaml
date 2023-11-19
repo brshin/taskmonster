@@ -39,6 +39,7 @@ dependencies:
   day_night_time_picker: ^1.3.0+1
   table_calendar: ^3.0.9
   calendar_date_picker2: ^0.5.3
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,7 @@ flutter:
     - assets/images/test_octopus.jpg
     - assets/images/test_serpent.jpg
     - assets/images/test_wolf.jpg
+    - assets/images/test_knight.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,15 +1,19 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:intl/intl.dart';
 import 'player.dart';
 import 'enemy.dart';
 import 'shop.dart';
 import 'database.dart';
+import 'dart:io';
 
 Player user = Player();
+int starRating = 1;
 
 void main() {
+  initializeGame();
   runApp(MyApp());
 }
 
@@ -28,6 +32,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+void initializeGame() {}
 
 class TaskController {
   // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -55,14 +61,16 @@ class Task {
   late DateTime date;
   late bool isCompleted;
   late Enemy enemy;
+  late int priority; // 0 1 2 3 4, 0 is highest
 
   Task(
       {required this.name,
       required this.description,
       required this.date,
       required this.enemy,
+      required this.priority,
       this.isCompleted = false}) {
-    enemy = Enemy.generateEnemy(name, description, date);
+    enemy = Enemy.generateEnemy(name, description, date, priority);
   }
 
   Map<String, dynamic> toJson() {
@@ -77,12 +85,12 @@ class Task {
 
   factory Task.fromJson(Map<String, dynamic> json) {
     return Task(
-      name: json['name'],
-      description: json['description'],
-      date: DateTime.parse(json['date']),
-      isCompleted: json['isCompleted'],
-      enemy: Enemy.fromJson(json['enemy']),
-    );
+        name: json['name'],
+        description: json['description'],
+        date: DateTime.parse(json['date']),
+        isCompleted: json['isCompleted'],
+        enemy: Enemy.fromJson(json['enemy']),
+        priority: json["priority"]);
   }
 
   bool isCompletedOnTime() {
@@ -117,41 +125,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
       body: ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (context, index) {
-          // return ListTile(
-          //   title: Row(children: <Widget>[
-          //     Text(
-          //       tasks[index].name,
-          //       style: TextStyle(
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //     Text(
-          //       ', ' +
-          //           DateFormat('MM/dd/yyyy').format(tasks[index].date) +
-          //           ', ',
-          //       style: TextStyle(
-          //         fontStyle: FontStyle.italic,
-          //       ),
-          //     ),
-          //     Text(
-          //       tasks[index].description,
-          //     ),
-          //     enemyWidget(context, tasks[index].enemy),
-          //   ]),
-          //   leading: Checkbox(
-          //     value: tasks[index].isCompleted,
-          //     onChanged: (value) {
-          //       setState(() {
-          //         tasks[index].isCompleted = value!;
-          //         Player the_chosen_one = Player();
-          //         tasks[index].enemy.battle(
-          //             the_chosen_one); // temporary - makes battle occur when task is completed
-          //       });
-          //     },
-          //   ),
-          // );
-
-          // alternative list format that may provide better spacing, feel free to revert to commented section above
           return ListTile(
             title: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -174,7 +147,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
-                    child: enemyWidget(context, tasks[index].enemy),
+                    child: enemyWidget(context, tasks[index].enemy, user),
                   ),
                 ],
               ),
@@ -230,13 +203,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
           ),
           Container(
             margin: EdgeInsets.all(10),
-            child: FloatingActionButton(
-              onPressed: () {
-                dbtest();
-              },
-              tooltip: 'Test Database',
-              child: Icon(Icons.umbrella),
-            ),
           ),
         ],
       ),
@@ -295,6 +261,23 @@ class _TaskListScreenState extends State<TaskListScreen> {
                             _selectDate();
                           },
                         ),
+                        Text('Difficulty'),
+                        RatingBar.builder(
+                          initialRating: 3,
+                          minRating: 1,
+                          direction: Axis.horizontal,
+                          allowHalfRating: true,
+                          itemCount: 5,
+                          itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                          itemBuilder: (context, _) => Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                          ),
+                          onRatingUpdate: (rating) {
+                            starRating = (rating.truncateToDouble()).toInt();
+                            //print(starRating);
+                          },
+                        ),
                       ],
                     ),
                   );
@@ -313,14 +296,17 @@ class _TaskListScreenState extends State<TaskListScreen> {
                   onPressed: () {
                     setState(() {
                       tasks.add(Task(
-                          name: taskController.nameController.text,
-                          description:
-                              taskController.descriptionController.text,
-                          date: DateTime.parse(
-                              taskController.dateController.text),
-                          enemy: Enemy.generateEnemy(taskController.nameController.text, 
-                            taskController.descriptionController.text, 
-                            DateTime.parse(taskController.dateController.text))));
+                        name: taskController.nameController.text,
+                        description: taskController.descriptionController.text,
+                        date:
+                            DateTime.parse(taskController.dateController.text),
+                        enemy: Enemy.generateEnemy(
+                            taskController.nameController.text,
+                            taskController.descriptionController.text,
+                            DateTime.parse(taskController.dateController.text),
+                            starRating),
+                        priority: starRating,
+                      ));
                     });
                     Navigator.of(context).pop();
                   },

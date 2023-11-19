@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'enemy.dart';
 
 //hello
 class Player {
@@ -53,6 +54,11 @@ class Player {
       expThreshold: json['expThreshold'],
       items: List<String>.from(json['items']),
     );
+  }
+
+  void reward(Enemy e) {
+    gold += e.strength * e.strength;
+    exp += e.strength * e.strength;
   }
 
   void _update_rank() {
