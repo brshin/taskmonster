@@ -122,6 +122,26 @@ Widget build(BuildContext context) {
      tooltip: 'Add Task',
      child: Icon(Icons.add),
    )
+   floatingActionButton: FloatingActionButton(
+    onPressed: () {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return PlayerScreen(
+            attack: 10,
+            defense: 10,
+            hp: 100,
+            level: '1',
+            armor: 'Iron Armor',
+            weapon: 'Sword',
+            pet: 'Cat',
+            imageUrl: 'https://fastly.picsum.photos/id/13/2500/1667.jpg?hmac=SoX9UoHhN8HyklRA4A3vcCWJMVtiBXUg0W4ljWTor7s',
+          );
+        },
+      );
+    },
+    child: Icon(Icons.person),
+    ),
  );
 }
   
