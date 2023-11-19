@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 //hello
 class Player {
@@ -26,33 +27,33 @@ class Player {
     //constructor
   });
 
-   Map<String, dynamic> toJson() {
-   return {
-     'attack': attack,
-     'defense': defense,
-     'hp': hp,
-     'level': level,
-     'exp': exp,
-     'gold': gold,
-     'rank': rank,
-     'expThreshold': expThreshold,
-     'items': items,
-   };
- }
+  Map<String, dynamic> toJson() {
+    return {
+      'attack': attack,
+      'defense': defense,
+      'hp': hp,
+      'level': level,
+      'exp': exp,
+      'gold': gold,
+      'rank': rank,
+      'expThreshold': expThreshold,
+      'items': items,
+    };
+  }
 
- factory Player.fromJson(Map<String, dynamic> json) {
-   return Player(
-     attack: json['attack'],
-     defense: json['defense'],
-     hp: json['hp'],
-     level: json['level'],
-     exp: json['exp'],
-     gold: json['gold'],
-     rank: json['rank'],
-     expThreshold: json['expThreshold'],
-     items: List<String>.from(json['items']),
-   );
- }
+  factory Player.fromJson(Map<String, dynamic> json) {
+    return Player(
+      attack: json['attack'],
+      defense: json['defense'],
+      hp: json['hp'],
+      level: json['level'],
+      exp: json['exp'],
+      gold: json['gold'],
+      rank: json['rank'],
+      expThreshold: json['expThreshold'],
+      items: List<String>.from(json['items']),
+    );
+  }
 
   void _update_rank() {
     if (level >= 30) {
@@ -94,6 +95,28 @@ for each level*0.4()
     one random stat increase
 
 */
+  }
+
+  void random_stat(int value) {
+    for (int i = 0; i < value; i++) {
+      var random = Random();
+      var number =
+          random.nextInt(3) + 1; // Generate a random number between 1 and 3
+
+      switch (number) {
+        case 1:
+          this.attack += 1;
+          break;
+        case 2:
+          this.defense += 1;
+          break;
+        case 3:
+          this.hp += 1;
+          break;
+        default:
+          print('Invalid number');
+      }
+    }
   }
 
   void _add_exp(int value) {
