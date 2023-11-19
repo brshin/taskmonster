@@ -173,7 +173,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                     tasks[index].description,
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 16.0),
                     child: enemyWidget(context, tasks[index].enemy),
                   ),
                 ],

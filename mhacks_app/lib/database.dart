@@ -3,6 +3,7 @@ import 'shop.dart';
 import 'main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:io';
 
 class DataBase {
   final int USER_ID = 1;
@@ -50,16 +51,16 @@ class DataBase {
 
   Future<void> updateDatabase() async {
     var url = Uri.parse(DataBase.url);
+    print("sending get request");
     var response = await http
-        .put(url, body: {'title': 'foo', 'body': 'bar', 'userId': '1'});
+        .get(url);
 
     if (response.statusCode == 200) {
       var jsonResponse = jsonDecode(response.body);
       var db = DataBase.fromJson(jsonResponse);
       print("retrieved database for user $USER_ID");
       print(db.storedPlayer);
-      print(db.storedShopOptions);
-      print(db.storedTasks);
+      print(db.storedPlayer.attack);
     } else {
       print('Request failed with status: ${response.statusCode}.');
     }
@@ -67,6 +68,7 @@ class DataBase {
 
   Future<void> updateCloud() async {
     var url = Uri.parse(DataBase.url + USER_ID.toString());
+    print("sending put request");
     var response = await http.put(url, body: toJson());
 
     if (response.statusCode == 200) {
@@ -77,11 +79,27 @@ class DataBase {
   }
 }
 
+Future<File> saveJsonToFile(Map<String, dynamic> jsonPayload) async {
+ // Convert the JSON payload to a string
+ String jsonString = jsonEncode(jsonPayload);
+
+ // Get the current working directory
+ String workingDirectory = Directory.current.path;
+
+ // Create a new file in the working directory
+ File file = File('$workingDirectory/json_file.json');
+
+ // Write the JSON string to the file
+ return file.writeAsString(jsonString);
+}
+
 void dbtest() {
   Player player1 = Player();
   Map<String, ItemStat> shop = Shop.master;
   DataBase db =
       DataBase(storedPlayer: player1, storedShopOptions: shop, storedTasks: []);
-  db.updateCloud();
-  db.updateDatabase();
+  // db.updateCloud();
+  var json = db.toJson();
+  saveJsonToFile(json);
+  // db.updateDatabase();
 }
