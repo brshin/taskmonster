@@ -1,8 +1,15 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:day_night_time_picker/day_night_time_picker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:calendar_date_picker2/calendar_date_picker2.dart';
+import 'player.dart';
+import 'enemy.dart';
+import 'shop.dart';
+
+Player user = Player();
 
 void main() {
   runApp(MyApp());
@@ -22,25 +29,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-/*
-class TaskController extends TextEditingController{
-    String name;
-    String description;
-    DateTime date;
-    
-    void openCalendar(BuildContext context) async {
-      table_calendar.
-    }
-}
-*/
-
 class TaskController {
   // final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController descriptionController;
   late TextEditingController dateController;
   late DateTime selectedTime;
-  
+
   TextEditingController get name => nameController;
   TextEditingController get description => descriptionController;
   TextEditingController get date => dateController;
@@ -53,18 +48,54 @@ class TaskController {
   }
 }
 
-class Task { // Define Task
- String name;
- String description;
- DateTime date;
- bool isCompleted;
+class Task {
+  // Define Task
+  late String name;
+  late String description;
+  late DateTime date;
+  late bool isCompleted;
+  late Enemy enemy;
 
- Task({required this.name, required this.description, required this.date, this.isCompleted = false});
+  Task(
+      {required this.name,
+      required this.description,
+      required this.date,
+      required this.enemy,
+      this.isCompleted = false}) {
+    enemy = Enemy.generateEnemy(name, description, date);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'description': description,
+      'date': date.toIso8601String(),
+      'isCompleted': isCompleted,
+      'enemy': enemy.toJson(),
+    };
+  }
+
+  factory Task.fromJson(Map<String, dynamic> json) {
+    return Task(
+      name: json['name'],
+      description: json['description'],
+      date: DateTime.parse(json['date']),
+      isCompleted: json['isCompleted'],
+      enemy: Enemy.fromJson(json['enemy']),
+    );
+  }
+
+  bool isCompletedOnTime() {
+    // Compare the current time with the due date
+    DateTime currentTime = DateTime.now();
+    return isCompleted || currentTime.isBefore(date);
+  }
 }
 
-class TaskListScreen extends StatefulWidget { // Define TaskListScreen
- @override
- _TaskListScreenState createState() => _TaskListScreenState();
+class TaskListScreen extends StatefulWidget {
+  // Define TaskListScreen
+  @override
+  _TaskListScreenState createState() => _TaskListScreenState();
 }
 
 class _TaskListScreenState extends State<TaskListScreen> {
@@ -76,76 +107,130 @@ class _TaskListScreenState extends State<TaskListScreen> {
   TaskController taskController = TaskController();
 
   @override
-Widget build(BuildContext context) {
- return Scaffold(
-   appBar: AppBar(
-     title: Text('Task List'),
-   ),
-   body: ListView.builder(
-     itemCount: tasks.length,
-     itemBuilder: (context, index) {
-       return ListTile(
-         title: Row(
-            children: <Widget>[
-              Text(
-                tasks[index].name,
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                ),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Task List'),
+      ),
+      body: ListView.builder(
+        itemCount: tasks.length,
+        itemBuilder: (context, index) {
+          // return ListTile(
+          //   title: Row(children: <Widget>[
+          //     Text(
+          //       tasks[index].name,
+          //       style: TextStyle(
+          //         fontWeight: FontWeight.bold,
+          //       ),
+          //     ),
+          //     Text(
+          //       ', ' +
+          //           DateFormat('MM/dd/yyyy').format(tasks[index].date) +
+          //           ', ',
+          //       style: TextStyle(
+          //         fontStyle: FontStyle.italic,
+          //       ),
+          //     ),
+          //     Text(
+          //       tasks[index].description,
+          //     ),
+          //     enemyWidget(context, tasks[index].enemy),
+          //   ]),
+          //   leading: Checkbox(
+          //     value: tasks[index].isCompleted,
+          //     onChanged: (value) {
+          //       setState(() {
+          //         tasks[index].isCompleted = value!;
+          //         Player the_chosen_one = Player();
+          //         tasks[index].enemy.battle(
+          //             the_chosen_one); // temporary - makes battle occur when task is completed
+          //       });
+          //     },
+          //   ),
+          // );
+
+          // alternative list format that may provide better spacing, feel free to revert to commented section above
+          return ListTile(
+            title: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Row(
+                children: <Widget>[
+                  Text(
+                    tasks[index].name,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    ', ${DateFormat('MM/dd/yyyy').format(tasks[index].date)}, ',
+                    style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
+                  Text(
+                    tasks[index].description,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: enemyWidget(context, tasks[index].enemy),
+                  ),
+                ],
               ),
-              Text(
-                ', ' + DateFormat('MM/dd/yyyy').format(tasks[index].date) + ', ',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                ),
-              ),
-              Text(
-                tasks[index].description,
-              ),
-            ]
-          ),
-         leading: Checkbox(
-           value: tasks[index].isCompleted,
-           onChanged: (value) {
-             setState(() {
-               tasks[index].isCompleted = value!;
-             });
-           },
-         ),
-       );
-     },
-   ),
-   floatingActionButton: FloatingActionButton(
-     onPressed: () {
-       _addTask(context);
-     },
-     tooltip: 'Add Task',
-     child: Icon(Icons.add),
-   )
-   floatingActionButton: FloatingActionButton(
-    onPressed: () {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return PlayerScreen(
-            attack: 10,
-            defense: 10,
-            hp: 100,
-            level: '1',
-            armor: 'Iron Armor',
-            weapon: 'Sword',
-            pet: 'Cat',
-            imageUrl: 'https://fastly.picsum.photos/id/13/2500/1667.jpg?hmac=SoX9UoHhN8HyklRA4A3vcCWJMVtiBXUg0W4ljWTor7s',
+            ),
+            leading: Checkbox(
+              value: tasks[index].isCompleted,
+              onChanged: (value) {
+                setState(() {
+                  tasks[index].isCompleted = value!;
+                  Player player = Player();
+                  tasks[index].enemy.battle(
+                      player); // temporary - makes battle occur when task is completed
+                });
+              },
+            ),
           );
         },
-      );
-    },
-    child: Icon(Icons.person),
-    ),
- );
-}
-  
-  
+      ),
+      floatingActionButton: Wrap(
+        direction: Axis.horizontal,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.all(10),
+            child: FloatingActionButton(
+              onPressed: () {
+                _addTask(context);
+              },
+              tooltip: 'Add Task',
+              child: Icon(Icons.add_task),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: FloatingActionButton(
+              onPressed: () {
+                // player code
+                _addPlayerScreen(context);
+              },
+              tooltip: 'Player Info',
+              child: Icon(Icons.person),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: FloatingActionButton(
+              onPressed: () {
+                // shop code
+                _showShop(context);
+              },
+              tooltip: 'Item Shop',
+              child: Icon(Icons.shopping_cart),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   // Task Interface
   Future<void> _addTask(BuildContext context) async {
     //TaskController taskController = TaskController();
@@ -154,80 +239,105 @@ Widget build(BuildContext context) {
     taskController.nameController.text = '';
 
     return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text('Add Task'),
-          content: Column(
-            children: [
-              Text('Task Name'),
-              TextField(
-                controller: taskController.nameController,
-                decoration: InputDecoration(hintText: 'Name'),
-              ),
-              SizedBox(height: 16.0), // Adding some space between fields
-              Text('Description'),
-              TextField(
-                controller: taskController.descriptionController,
-                decoration: InputDecoration(hintText: 'Description'),
-              ),
-              SizedBox(height: 16.0), // Adding some space between fields
-              Text('Date'),
-              TextField(
-                controller: taskController.dateController,
-                decoration: InputDecoration(
-                  labelText: 'Date',
-                  filled: true,
-                  prefixIcon: Icon(Icons.calendar_today),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.purple)
-                  ),
-                ),
-                readOnly: true,
-                onTap: (){
-                  _selectDate();
+        context: context,
+        builder: (_) => AlertDialog(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(10.0))),
+              content: Builder(
+                builder: (context) {
+                  var height = MediaQuery.of(context).size.height;
+                  var width = MediaQuery.of(context).size.width;
+                  return Container(
+                    height: height - 400,
+                    width: width - 400,
+                    child: Column(
+                      children: <Widget>[
+                        Text('Task Name'),
+                        TextField(
+                          controller: taskController.nameController,
+                          decoration: InputDecoration(hintText: 'Name'),
+                        ),
+                        SizedBox(
+                            height: 16.0), // Adding some space between fields
+                        Text('Description'),
+                        TextField(
+                          controller: taskController.descriptionController,
+                          decoration: InputDecoration(hintText: 'Description'),
+                        ),
+                        SizedBox(
+                            height: 16.0), // Adding some space between fields
+                        Text('Due Date'),
+                        TextField(
+                          controller: taskController.dateController,
+                          decoration: InputDecoration(
+                            labelText: 'Date',
+                            filled: true,
+                            prefixIcon: Icon(Icons.calendar_today),
+                            enabledBorder:
+                                OutlineInputBorder(borderSide: BorderSide.none),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: Colors.purple)),
+                          ),
+                          readOnly: true,
+                          onTap: () {
+                            _selectDate();
+                          },
+                        ),
+                      ],
+                    ),
+                  );
+                  // Get available height and width of the build area of this widget. Make a choice depending on the size.
                 },
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Cancel'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  tasks.add(Task(name: taskController.nameController.text, 
-                                 description: taskController.descriptionController.text,
-                                 date: DateTime.parse(taskController.dateController.text)));
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text('Add'),
-            ),
-          ],
-        );
-      },
-    );
+              title: Text('Add Task'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Cancel'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      tasks.add(Task(
+                          name: taskController.nameController.text,
+                          description:
+                              taskController.descriptionController.text,
+                          date: DateTime.parse(
+                              taskController.dateController.text),
+                          enemy: Enemy.generateEnemy(taskController.nameController.text, 
+                            taskController.descriptionController.text, 
+                            DateTime.parse(taskController.dateController.text))));
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Add'),
+                ),
+              ],
+            ));
+  }
+
+  Future<void> _addPlayerScreen(BuildContext context) async {
+    PlayerScreen screen = PlayerScreen(user);
+    screen.show(context);
+  }
+
+  Future<void> _showShop(BuildContext context) async {
+    Shop shop = Shop.namedConstructor(user);
+    shop.displayShop(context, user);
   }
 
   Future<void> _selectDate() async {
-    DateTime? _picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2022),
-      lastDate: DateTime(2100)
-    );
+    DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2022),
+        lastDate: DateTime(2100));
 
-    if (_picked != null) {
+    if (picked != null) {
       setState(() {
-        taskController.dateController.text = _picked.toString().split(" ")[0];
+        taskController.dateController.text = picked.toString().split(" ")[0];
       });
     }
   }
