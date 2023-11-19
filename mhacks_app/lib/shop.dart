@@ -1,85 +1,60 @@
 import 'package:flutter/material.dart';
 import 'player.dart';
 
-/* STATE FOR SHOP - since shop is a pop-up display, no state is needed. keeping this for reference */
-/*
-class ShopPage {
-  final Player player;
+class ItemStat {
+  late int attackBoost;
+  late int defenseBoost;
+  late int healthBoost;
+  late bool consumable;
+  late int price;
+  late int unlockLevel;
 
-  ShopPage({required this.player});
-
-  Future<void> displayShop(BuildContext context, Player player) {
-    return showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              // shape: RoundedRectangleBorder(
-              //   borderRadius: BorderRadius.all(Radius.circular(10.0))),
-              content: Builder(
-                builder: (context) {
-                  var height = MediaQuery.of(context).size.height;
-                  var width = MediaQuery.of(context).size.width;
-                  return Container(
-                    height: height - 400,
-                    width: width - 400,
-                    child: ListView.builder(
-                      itemCount: currentShopMap.length,
-                      itemBuilder: (context, index) {
-                        var item = currentShopMap.entries.elementAt(index);
-                        if (itemAvailable(item.key, player)) {
-                          return ShopItem(
-                            itemName: item.key,
-                            itemPrice: costMap[item.key] ?? -1,
-                            onPressed: () => purchaseItem(item.key, player),
-                          );
-                        } else {
-                          return SizedBox
-                              .shrink(); // Return an empty widget if the item is not available
-                        }
-                      },
-                    ),
-                    
-                    child: Column(
-                      //mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        for (var item in currentShopMap.entries)
-                          if (itemAvailable(item.key, player))
-                            ShopItem(
-                              itemName: item.key,
-                              itemPrice: costMap[item.key] ?? -1,
-                              onPressed: () => purchaseItem(item.key, player),
-                            ),
-                      ],
-                    ),
-                    
-                  );
-                },
-              ),
-              // title: Text(''),
-              // actions: [
-
-              // ],
-            ));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Container(
-          height: 200,
-          width: 100,
-          color: Colors.yellow,
-        ),
-      ),
-    );
-  }
-  // _ShopPageState createState() => _ShopPageState();
-} 
-*/
+  ItemStat({
+    required this.attackBoost,
+    required this.defenseBoost,
+    required this.healthBoost,
+    required this.consumable,
+    required this.price,
+    required this.unlockLevel,
+  });
+}
 
 class Shop {
   // master shop map of all possible items
   // KEY: Item name, VALUE: Unlock level
+  Map<String, ItemStat> shopMap = {
+    'Sword': ItemStat(1, 0, 0, false, 10, 1),
+    'Apple': ItemStat(0, 0, 2, true, 10, 2),
+    'Shield': ItemStat(0, 2, 0, false, 20, 3),
+    'Health Potion': ItemStat(0, 0, 7, true, 15, 4),
+    'Magic Wand': ItemStat(3, 0, 0, false, 30, 5),
+    'Helmet': ItemStat(0, 3, 0, false, 25, 6),
+    'Gold Sword': ItemStat(5, 0, 0, false, 40, 7),
+    'Bow': ItemStat(3, 0, 0, false, 35, 8),
+    'Mana Elixir': ItemStat(0, 0, 8, true, 20, 9),
+    'Diamond Sword': ItemStat(7, 0, 0, false, 60, 10),
+    'Platinum Shield': ItemStat(0, 5, 0, false, 50, 11),
+    'Enchanted Robe': ItemStat(0, 3, 0, false, 40, 12),
+    'Dagger': ItemStat(5, 0, 0, false, 35, 13),
+    'Crystal Ball': ItemStat(1, 1, 1, true, 40, 14),
+    'Steel Armor': ItemStat(0, 7, 0, false, 45, 15),
+    'Fire Staff': ItemStat(8, 0, 0, false, 50, 16),
+    'Elixir of Wisdom': ItemStat(0, 0, 10, true, 55, 17),
+    'Invisibility Cloak': ItemStat(3, 3, 0, true, 60, 18),
+    'Thunder Hammer': ItemStat(10, 0, 0, false, 65, 19),
+    'Phoenix Feather': ItemStat(0, 0, 15, true, 70, 20),
+    'Ice Blade': ItemStat(10, 0, 0, false, 75, 21),
+    'Dragon Scale Armor': ItemStat(0, 10, 0, false, 80, 22),
+    'Vortex Orb': ItemStat(0, 0, 20, true, 85, 23),
+    'Shadow Cloak': ItemStat(5, 5, 0, false, 90, 24),
+    'Mystic Bow': ItemStat(10, 0, 0, false, 95, 25),
+    'Amulet of Power': ItemStat(15, 0, -10, true, 100, 26),
+    'Celestial Staff': ItemStat(18, -5, 0, false, 105, 27),
+    'Titanium Shield': ItemStat(0, 15, -10, false, 110, 28),
+    'Dimensional Robes': ItemStat(0, 0, 25, true, 115, 29),
+    'Excalibur': ItemStat(25, 0, 0, false, 200, 30),
+  };
+
   static const Map<String, int> masterShopMap = {
     'Sword': 1,
     'Apple': 2,
@@ -145,7 +120,7 @@ class Shop {
     'Celestial Staff': 105,
     'Titanium Shield': 110,
     'Dimensional Robes': 115,
-    'Excalibur': 120,
+    'Excalibur': 200,
   };
 
   // temporary shop map of items currently available
