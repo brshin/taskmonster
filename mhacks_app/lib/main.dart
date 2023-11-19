@@ -2,12 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:day_night_time_picker/day_night_time_picker.dart';
-import 'package:table_calendar/table_calendar.dart';
-import 'package:calendar_date_picker2/calendar_date_picker2.dart';
 import 'player.dart';
 import 'enemy.dart';
 import 'shop.dart';
+import 'database.dart';
 
 Player user = Player();
 
@@ -16,6 +14,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -93,6 +93,8 @@ class Task {
 }
 
 class TaskListScreen extends StatefulWidget {
+  const TaskListScreen({super.key});
+
   // Define TaskListScreen
   @override
   _TaskListScreenState createState() => _TaskListScreenState();
@@ -100,8 +102,8 @@ class TaskListScreen extends StatefulWidget {
 
 class _TaskListScreenState extends State<TaskListScreen> {
   List<Task> tasks = [];
-  DateTime _selectedDay = DateTime.now();
-  DateTime _dates = DateTime.now();
+  final DateTime _selectedDay = DateTime.now();
+  final DateTime _dates = DateTime.now();
 
   //TextEditingController dateController = TextEditingController();
   TaskController taskController = TaskController();
@@ -226,6 +228,16 @@ class _TaskListScreenState extends State<TaskListScreen> {
               child: Icon(Icons.shopping_cart),
             ),
           ),
+          Container(
+            margin: EdgeInsets.all(10),
+            child: FloatingActionButton(
+              onPressed: () {
+                dbtest();
+              },
+              tooltip: 'Test Database',
+              child: Icon(Icons.umbrella),
+            ),
+          ),
         ],
       ),
     );
@@ -247,7 +259,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;
                   var width = MediaQuery.of(context).size.width;
-                  return Container(
+                  return SizedBox(
                     height: height - 400,
                     width: width - 400,
                     child: Column(

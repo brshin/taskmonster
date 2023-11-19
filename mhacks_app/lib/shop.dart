@@ -22,50 +22,50 @@ class ItemStat {
 class Shop {
   // master shop map of all possible items
   // KEY: Item name, VALUE: Unlock level
-  Map<String, ItemStat> shopMap = {
-    'Sword': ItemStat(1, 0, 0, false, 10, 1),
-    'Apple': ItemStat(0, 0, 2, true, 10, 2),
-    'Shield': ItemStat(0, 2, 0, false, 20, 3),
-    'Health Potion': ItemStat(0, 0, 7, true, 15, 4),
-    'Magic Wand': ItemStat(3, 0, 0, false, 30, 5),
-    'Helmet': ItemStat(0, 3, 0, false, 25, 6),
-    'Gold Sword': ItemStat(5, 0, 0, false, 40, 7),
-    'Bow': ItemStat(3, 0, 0, false, 35, 8),
-    'Mana Elixir': ItemStat(0, 0, 8, true, 20, 9),
-    'Diamond Sword': ItemStat(7, 0, 0, false, 60, 10),
-    'Platinum Shield': ItemStat(0, 5, 0, false, 50, 11),
-    'Enchanted Robe': ItemStat(0, 3, 0, false, 40, 12),
-    'Dagger': ItemStat(5, 0, 0, false, 35, 13),
-    'Crystal Ball': ItemStat(1, 1, 1, true, 40, 14),
-    'Steel Armor': ItemStat(0, 7, 0, false, 45, 15),
-    'Fire Staff': ItemStat(8, 0, 0, false, 50, 16),
-    'Elixir of Wisdom': ItemStat(0, 0, 10, true, 55, 17),
-    'Invisibility Cloak': ItemStat(3, 3, 0, true, 60, 18),
-    'Thunder Hammer': ItemStat(10, 0, 0, false, 65, 19),
-    'Phoenix Feather': ItemStat(0, 0, 15, true, 70, 20),
-    'Ice Blade': ItemStat(10, 0, 0, false, 75, 21),
-    'Dragon Scale Armor': ItemStat(0, 10, 0, false, 80, 22),
-    'Vortex Orb': ItemStat(0, 0, 20, true, 85, 23),
-    'Shadow Cloak': ItemStat(5, 5, 0, false, 90, 24),
-    'Mystic Bow': ItemStat(10, 0, 0, false, 95, 25),
-    'Amulet of Power': ItemStat(15, 0, -10, true, 100, 26),
-    'Celestial Staff': ItemStat(18, -5, 0, false, 105, 27),
-    'Titanium Shield': ItemStat(0, 15, -10, false, 110, 28),
-    'Dimensional Robes': ItemStat(0, 0, 25, true, 115, 29),
-    'Excalibur': ItemStat(25, 0, 0, false, 200, 30),
+  static Map<String, ItemStat> master = {
+    'Sword': ItemStat(attackBoost: 1, defenseBoost: 0, healthBoost: 0, consumable: false, price: 10, unlockLevel: 1),
+    'Apple': ItemStat(attackBoost: 0, defenseBoost: 0, healthBoost: 2, consumable: true, price: 10, unlockLevel: 2),
+    'Shield': ItemStat(attackBoost: 0, defenseBoost: 2, healthBoost: 0, consumable: false, price: 20, unlockLevel: 3),
+    'Health Potion': ItemStat(attackBoost: 0, defenseBoost: 0, healthBoost: 7, consumable: true, price: 15, unlockLevel: 4),
+    'Magic Wand': ItemStat(attackBoost: 3, defenseBoost: 0, healthBoost: 0, consumable: false, price: 30, unlockLevel: 5),
+    'Helmet': ItemStat(attackBoost: 0, defenseBoost: 3, healthBoost: 0, consumable: false, price: 25, unlockLevel: 6),
+    'Bow': ItemStat(attackBoost: 3, defenseBoost: 0, healthBoost: 0, consumable: false, price: 35, unlockLevel: 8),
+    'Mana Elixir': ItemStat(attackBoost: 0, defenseBoost: 0, healthBoost: 8, consumable: true, price: 20, unlockLevel: 9),
+    'Diamond Sword': ItemStat(attackBoost: 7, defenseBoost: 0, healthBoost: 0, consumable: false, price: 60, unlockLevel: 10),
+    'Platinum Shield': ItemStat(attackBoost: 0, defenseBoost: 5, healthBoost: 0, consumable: false, price: 50, unlockLevel: 11),
+    'Enchanted Robe': ItemStat(attackBoost: 0, defenseBoost: 3, healthBoost: 0, consumable: false, price: 40, unlockLevel: 12),
+    'Dagger': ItemStat(attackBoost: 5, defenseBoost: 0, healthBoost: 0, consumable: false, price: 35, unlockLevel: 13),
+    'Crystal Ball': ItemStat(attackBoost: 1, defenseBoost: 1, healthBoost: 1, consumable: true, price: 40, unlockLevel: 14),
+    'Steel Armor': ItemStat(attackBoost: 0, defenseBoost: 7, healthBoost: 0, consumable: false, price: 45, unlockLevel: 15),
+    'Fire Staff': ItemStat(attackBoost: 8, defenseBoost: 0, healthBoost: 0, consumable: false, price: 50, unlockLevel: 16),
+    'Elixir of Wisdom': ItemStat(attackBoost: 0, defenseBoost: 0, healthBoost: 10, consumable: true, price: 55, unlockLevel: 17),
+    'Invisibility Cloak': ItemStat(attackBoost: 3, defenseBoost: 3, healthBoost: 0, consumable: true, price: 60, unlockLevel: 18),
+    'Thunder Hammer': ItemStat(attackBoost: 10, defenseBoost: 0, healthBoost: 0, consumable: false, price: 65, unlockLevel: 19),
+    'Phoenix Feather': ItemStat(attackBoost: 0, defenseBoost: 0, healthBoost: 15, consumable: true, price: 70, unlockLevel: 20),
+    'Ice Blade': ItemStat(attackBoost: 10, defenseBoost: 0, healthBoost: 0, consumable: false, price: 75, unlockLevel: 21),
+    'Dragon Scale Armor': ItemStat(attackBoost: 0, defenseBoost: 10, healthBoost: 0, consumable: false, price: 80, unlockLevel: 22),
+    'Vortex Orb': ItemStat(attackBoost: 0, defenseBoost: 0, healthBoost: 20, consumable: true, price: 85, unlockLevel: 23),
+    'Shadow Cloak': ItemStat(attackBoost: 5, defenseBoost: 5, healthBoost: 0, consumable: false, price: 90, unlockLevel: 24),
+    'Mystic Bow': ItemStat(attackBoost: 10, defenseBoost: 0, healthBoost: 0, consumable: false, price: 95, unlockLevel: 25),
+    'Amulet of Power': ItemStat(attackBoost: 15, defenseBoost: 0, healthBoost: -10, consumable: true, price: 100, unlockLevel: 26),
+    'Celestial Staff': ItemStat(attackBoost: 18, defenseBoost: -5, healthBoost: 0, consumable: false, price: 105, unlockLevel: 27),
+    'Titanium Shield': ItemStat(attackBoost: 0, defenseBoost: 15, healthBoost: -10, consumable: false, price: 110, unlockLevel: 28),
+    'Dimensional Robes': ItemStat(attackBoost: 0, defenseBoost: 0, healthBoost: 25, consumable: true, price: 115, unlockLevel: 29),
+    'Excalibur': ItemStat(attackBoost: 25, defenseBoost: 0, healthBoost: 0, consumable: false, price: 200, unlockLevel: 30),
   };
 
   // temporary shop map of items currently available
   // KEY: Item name, VALUE: Unlock level
   // INVARIANT: subset of masterShopMap
-  late Map<String, int> currentShopMap;
+  late Map<String, ItemStat> current;
 
-  Shop(Map<String, int> current) {
-    currentShopMap = current;
+  Shop(Map<String, ItemStat> c) {
+    current = c;
   }
 
+// this should determine current based on user inventory and experience
   Shop.namedConstructor(Player user) {
-    currentShopMap = costMap;
+    current = current;
   }
 
   // prototype of display function
@@ -77,21 +77,21 @@ class Shop {
                 builder: (context) {
                   var height = MediaQuery.of(context).size.height;
                   var width = MediaQuery.of(context).size.width;
-                  return Container(
+                  return SizedBox(
                     height: height - 400,
                     width: width - 400,
                     child: ListView.builder(
-                      itemCount: currentShopMap.length,
+                      itemCount: current.length,
                       itemBuilder: (context, index) {
-                        var item = currentShopMap.entries.elementAt(index);
+                        var item = current.entries.elementAt(index);
                         if (itemAvailable(item.key, player)) {
                           return ShopItem(
                             itemName: item.key,
-                            itemPrice: costMap[item.key] ?? -1,
+                            itemPrice: master[item.key]?.price ?? -1,
                             onPressed: () => purchaseItem(item.key, player),
                           );
                         } else {
-                          return SizedBox
+                          return const SizedBox
                               .shrink(); // Return an empty widget if the item is not available
                         }
                       },
@@ -105,13 +105,13 @@ class Shop {
   // determines whether an item is available, based on the player's level
   bool itemAvailable(String item, Player player) {
     int playerLevel = player.level;
-    int requiredLevel = masterShopMap[item] ?? 1;
+    int requiredLevel = master[item]?.unlockLevel ?? 1;
     return playerLevel >= requiredLevel;
   }
 
   // determines whether an item can be bought by a given player
   bool itemAffordable(String item, Player player) {
-    int cost = costMap[item] ?? -1;
+    int cost = master[item]?.price ?? -1;
     if (cost == -1) {
       return false;
     } else {
@@ -121,13 +121,13 @@ class Shop {
 
   // returns a boolean that shows whether the transaction went through or not
   bool purchaseItem(String item, Player player) {
-    int cost = costMap[item] ?? -1;
+    int cost = master[item]?.price ?? -1;
     if (!itemAffordable(item, player)) {
       return false;
     } else {
       player.gold -= cost;
       player.items.add(item);
-      currentShopMap.remove(item);
+      current.remove(item);
       return true;
     }
   }
@@ -138,7 +138,7 @@ class ShopItem extends StatelessWidget {
   final int itemPrice;
   final VoidCallback onPressed;
 
-  ShopItem({
+  const ShopItem({super.key, 
     required this.itemName,
     required this.itemPrice,
     required this.onPressed,
@@ -150,7 +150,7 @@ class ShopItem extends StatelessWidget {
       title: Text(itemName),
       subtitle: Text('\$${itemPrice.toString()}'),
       trailing: IconButton(
-        icon: Icon(Icons.add_shopping_cart),
+        icon: const Icon(Icons.add_shopping_cart),
         onPressed: onPressed,
       ),
     );

@@ -1,6 +1,4 @@
-import 'player.dart';
 import 'main.dart';
-import 'enemy.dart';
 
 class Currency {
   int gold;

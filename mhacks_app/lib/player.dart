@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'enemy.dart';
 
 //hello
 class Player {
@@ -77,12 +75,12 @@ class Player {
   }
 
   void _update_level() {
-    int stat_increase = 2;
+    int statIncrease = 2;
 
     level += 1;
-    attack += stat_increase;
-    defense += stat_increase;
-    hp += stat_increase;
+    attack += statIncrease;
+    defense += statIncrease;
+    hp += statIncrease;
 /* 
 for loop to do this...
 
@@ -125,8 +123,8 @@ for each level*0.4()
   }
 
   bool _subtract_gold(int value) {
-    int gold_diff = gold - value;
-    if (gold_diff >= 0) {
+    int goldDiff = gold - value;
+    if (goldDiff >= 0) {
       gold -= value;
       return true;
     } else {
@@ -171,45 +169,45 @@ class PlayerScreen {
     return showDialog(
         context: context,
         builder: (_) => AlertDialog(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0))),
             content: Builder(builder: (context) {
               var height = MediaQuery.of(context).size.height;
               var width = MediaQuery.of(context).size.width;
-              return Container(
+              return SizedBox(
                   height: height - 400,
                   width: width - 400,
                   child: Column(
                     children: <Widget>[
                       Text(
                         'Rank: ${currentPlayer.rank}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Level: ${currentPlayer.level}',
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold),
                       ),
                       Text(
                         'Exp: ${currentPlayer.exp}',
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                       Text(
                         'Gold: ${currentPlayer.gold}',
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                       Text(
                         'HP: ${currentPlayer.hp}',
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                       Text(
                         'Defense: ${currentPlayer.defense}',
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                       Text(
                         'Attack: ${currentPlayer.attack}',
-                        style: TextStyle(fontSize: 18),
+                        style: const TextStyle(fontSize: 18),
                       ),
                     ],
                   ));
