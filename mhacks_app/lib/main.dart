@@ -157,9 +157,8 @@ class _TaskListScreenState extends State<TaskListScreen> {
               onChanged: (value) {
                 setState(() {
                   tasks[index].isCompleted = value!;
-                  Player player = Player();
                   tasks[index].enemy.battle(
-                      player); // temporary - makes battle occur when task is completed
+                      user); // temporary - makes battle occur when task is completed
                 });
               },
             ),

@@ -46,31 +46,48 @@ class Enemy {
       String name, String description, DateTime date, int stars) {
     String imagePath = "";
     int strength = stars;
-    int i = Random().nextInt(6);
+    int i = 2 * strength + Random().nextInt(1);
+    int attack = strength;
     switch (i) {
-      case 0:
-        imagePath = 'assets/images/test_dragon.jpg';
-        //strength = 5;
-        break;
       case 1:
-        imagePath = 'assets/images/test_eagle.jpg';
-        //strength = 4;
+        imagePath = 'assets/images/test_octopus.jpg';
+        attack = 2;
         break;
       case 2:
-        imagePath = 'assets/images/test_goblin.jpg';
-        // strength = 2;
+        imagePath = 'assets/images/test_spider.jpg';
+        attack = 3;
         break;
       case 3:
-        imagePath = 'assets/images/test_octopus.jpg';
-        // strength = 1;
+        imagePath = 'assets/images/test_wolf.jpg';
+        attack = 4;
         break;
       case 4:
         imagePath = 'assets/images/test_serpent.jpg';
-        // strength = 3;
+        attack = 5;
         break;
       case 5:
-        imagePath = 'assets/images/test_wolf.jpg';
-        // strength = 2;
+        imagePath = 'assets/images/test_goblin.jpg';
+        attack = 6;
+        break;
+      case 6:
+        imagePath = 'assets/images/test_eagle.jpg';
+        attack = 7;
+        break;
+      case 7:
+        imagePath = 'assets/images/test_rhino.jpg';
+        attack = 8;
+        break;
+      case 8:
+        imagePath = 'assets/images/test_golem.jpg';
+        attack = 9;
+        break;
+      case 9:
+        imagePath = 'assets/images/test_yeti.jpg';
+        attack = 10;
+        break;
+      default:
+        imagePath = 'assets/images/test_dragon.jpg';
+        attack = 12;
         break;
     }
     return Enemy(
@@ -80,8 +97,8 @@ class Enemy {
         description: description,
         defeated: false,
         strength: strength,
-        hp: strength * 6,
-        attack: strength,
+        hp: strength * 3 + 5,
+        attack: attack,
         battleResults: generateBattleResults("", "", 0, 0));
   }
 
@@ -105,6 +122,7 @@ class Enemy {
     hp = originalEnemyHp; // in case objects are reused
     battleResults.completed = true;
     // calculates battle score
+    battleResults.exp = strength * strength;
     battleResults.battlePerformance =
         ((battleResults.damageDealt / battleResults.damageTaken) * 2.5).toInt();
     if (battleResults.battlePerformance > 5) {
@@ -219,15 +237,25 @@ Future<void> showBattleResults(BuildContext context, BattleResults br) {
                     children: <Widget>[
                       Image.asset(
                         "assets/images/test_knight.jpg",
-                        width: 48.0,
-                        height: 48.0,
+                        width: 150.0,
+                        height: 150.0,
                       ),
                       Image.asset(
                         br.enemyImagePath,
-                        width: 48.0,
-                        height: 48.0,
+                        width: 150.0,
+                        height: 150.0,
                       ),
                     ],
+                  ),
+                  RatingBarIndicator(
+                    rating: br.battlePerformance.toDouble(),
+                    itemBuilder: (context, index) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    itemCount: 5,
+                    itemSize: 50.0,
+                    direction: Axis.horizontal,
                   ),
                 ],
               ),

@@ -15,12 +15,12 @@ class Player {
   List<String> items = [];
 
   Player({
-    this.attack = 1,
-    this.defense = 1,
-    this.hp = 1,
+    this.attack = 3,
+    this.defense = 3,
+    this.hp = 20,
     this.level = 1,
     this.exp = 0,
-    this.gold = 0,
+    this.gold = 15,
     this.rank = 'Scout',
     this.expThreshold = 100,
     this.items = const [],

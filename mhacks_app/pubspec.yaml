@@ -68,10 +68,15 @@ flutter:
     - assets/images/test_dragon.jpg
     - assets/images/test_eagle.jpg
     - assets/images/test_goblin.jpg
+    - assets/images/test_golem.jpg
+    - assets/images/test_knight.jpg
     - assets/images/test_octopus.jpg
+    - assets/images/test_rhino.jpg
     - assets/images/test_serpent.jpg
     - assets/images/test_wolf.jpg
-    - assets/images/test_knight.jpg
+    - assets/images/test_spider.jpg
+    - assets/images/test_yeti.jpg
+    
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
