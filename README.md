@@ -1,3 +1,18 @@
+> **Note:** This is a personal fork of a collaborative hackathon project. My specific contributions are detailed below.
+
+# TaskMonster | A Gamified To-Do List App
+
+A mobile productivity app built in 24 hours for the MHacks Hackathon (Nov. 2023). TaskMonster gamifies your to-do list, turning task completion into a fun, points-based challenge.
+
+### My Contributions
+As part of a four-member team, I was involved in the entire process from concept to working prototype. My specific responsibilities included:
+
+-   Designing the user interface in Flutter.
+-   Helping refine the core functionality for adding, tracking, and rewarding tasks.
+
+--- 
+*(The original README content starts below)*
+
 ## Inspiration
 TaskMonster was born out of a passion for productivity, an affinity for video games, and a desire to build something meaningful and fun at Mhacks16.
 
